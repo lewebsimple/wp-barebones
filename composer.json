@@ -1,0 +1,60 @@
+{
+  "name": "lewebsimple/wp-boilerplate",
+  "description": "WordPress project",
+  "version": "0.4.14",
+  "type": "project",
+  "license": "MIT",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    },
+    {
+      "type": "composer",
+      "url": "https://satis.ledevsimple.ca"
+    }
+  ],
+  "prefer-stable": true,
+  "config": {
+    "platform": {
+      "php": "8.2"
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  },
+  "scripts": {
+    "post-create-project-cmd": [
+      "./scripts/post-create.sh"
+    ]
+  },
+  "require": {
+    "lewebsimple/acf-address": "*",
+    "lewebsimple/acf-phone": "*",
+    "lewebsimple/acf-polylang": "*",
+    "lewebsimple/advanced-custom-fields-pro": "*",
+    "lewebsimple/gravity-forms-polylang": "*",
+    "lewebsimple/gravityforms": "*",
+    "lewebsimple/gravityformsturnstile": "*",
+    "lewebsimple/ithemes-security-pro": "*",
+    "lewebsimple/kaliroots": "*",
+    "lewebsimple/polylang-pro": "*",
+    "lewebsimple/theia-smart-thumbnails-premium": "*",
+    "lewebsimple/wp-offload-ses": "*",
+    "wpackagist-plugin/acf-options-for-polylang": "*",
+    "wpackagist-plugin/clean-image-filenames": "*",
+    "wpackagist-plugin/disable-comments": "*",
+    "wpackagist-plugin/enable-media-replace": "*",
+    "wpackagist-plugin/ewww-image-optimizer": "*",
+    "wpackagist-plugin/hide-updates": "*",
+    "wpackagist-plugin/loco-translate": "*",
+    "wpackagist-plugin/redirection": "*",
+    "wpackagist-plugin/safe-svg": "*",
+    "wpackagist-plugin/simple-custom-post-order": "*",
+    "wpackagist-plugin/so-clean-up-wp-seo": "*",
+    "wpackagist-plugin/user-switching": "*",
+    "wpackagist-plugin/wordpress-seo": "*"
+  }
+}

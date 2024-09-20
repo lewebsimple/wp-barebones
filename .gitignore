@@ -1,0 +1,22 @@
+# Project-specific files
+/*
+!/.cpanel.yml
+!/.gitignore
+!/composer.*
+!/phpcs.xml
+!/wp-content/
+/wp-content/*
+
+# Scripts
+!/scripts/
+
+# Version-controlled plugins
+!/wp-content/mu-plugins/
+!/wp-content/plugins/
+/wp-content/plugins/*
+!/wp-content/plugins/.gitkeep
+
+# Version-controlled themes
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/.gitkeep

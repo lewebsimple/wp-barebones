@@ -1,0 +1,15 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/wp-boilerplate/public_html
+    - composer install
+    # - pnpm --dir ./wp-content/themes/wp-boilerplate install
+    # - pnpm --dir ./wp-content/themes/wp-boilerplate build
+    # - yarn --cwd ./wp-content/themes/wp-boilerplate install
+    # - yarn --cwd ./wp-content/themes/wp-boilerplate build
+    # - mkdir -p ${DEPLOYPATH}/vendor/
+    # - rsync -av ./vendor/ ${DEPLOYPATH}/vendor/ --delete
+    - mkdir -p ${DEPLOYPATH}/wp-content/mu-plugins/
+    - rsync -av ./wp-content/mu-plugins/ ${DEPLOYPATH}/wp-content/mu-plugins/ --delete
+    - rsync -av ./wp-content/plugins/ ${DEPLOYPATH}/wp-content/plugins/ --delete
+    - rsync -av ./wp-content/themes/ ${DEPLOYPATH}/wp-content/themes/ --delete --exclude=node_modules
