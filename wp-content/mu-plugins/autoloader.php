@@ -1,28 +1,22 @@
 <?php
 
 /**
- * Plugin Name: Must Use Plugins
- * Plugin URI: https://github.com/roots/bedrock-autoloader
- * Description: Must-use plugins (a.k.a. mu-plugins) are plugins installed in a special directory inside the content folder and which are automatically enabled on all sites in the installation.
+ * Plugin Name: Plugins Autoloader
+ * Plugin URI: https://github.com/lewebsimple/wp-boilerplate
+ * Description: Environment-aware autoloader for must-use plugins (a.k.a. mu-plugins) based on the Bedrock Autoloader.
  * Version: 1.0.0
- * Author: Roots
- * Author URI: https://roots.io/
+ * Author: Websimple
+ * Author URI: https://rwww.websimple.com/
  * License: MIT
  */
 
-namespace Roots\Bedrock;
-
-/**
- * Class Autoloader
- *
- * @package Roots\Bedrock
- * @author Roots
- * @link https://roots.io/
- */
-class Autoloader {
+class PluginsAutoloader {
 
 	/** @var static Singleton instance */
 	private static $instance;
+
+	/** @var bool Whether the site is in production */
+	private bool $isProd;
 
 	/** @var array Store Autoloader cache and site option */
 	private $cache;
@@ -40,7 +34,10 @@ class Autoloader {
 	private $activated;
 
 	/** @var string Relative path to the mu-plugins dir */
-	private $relativePath;
+	private $muPluginsPath;
+
+	/** @var string Relative path to the {env}-plugins dir */
+	private $envPluginsPath;
 
 	/**
 	 * Create singleton, populate vars, and set WordPress hooks
@@ -51,8 +48,10 @@ class Autoloader {
 		}
 
 		self::$instance = $this;
+		$this->isProd   = getenv( 'WP_ENV' ) !== 'development';
 
-		$this->relativePath = '/../' . basename( WPMU_PLUGIN_DIR );
+		$this->muPluginsPath  = '/../' . basename( WPMU_PLUGIN_DIR );
+		$this->envPluginsPath = str_replace( 'mu-plugins', $this->isProd ? 'prod-plugins' : 'dev-plugins', $this->muPluginsPath );
 
 		if ( is_admin() ) {
 			add_filter( 'show_advanced_plugins', array( $this, 'showInAdmin' ), 0, 2 );
@@ -132,7 +131,7 @@ class Autoloader {
 	private function updateCache() {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-		$this->autoPlugins = get_plugins( $this->relativePath );
+		$this->autoPlugins = get_plugins( $this->muPluginsPath );
 		$this->muPlugins   = get_mu_plugins();
 		$plugins           = array_diff_key( $this->autoPlugins, $this->muPlugins );
 		$rebuild           = ! isset( $this->cache['plugins'] );
@@ -197,5 +196,5 @@ class Autoloader {
 }
 
 if ( is_blog_installed() ) {
-	new Autoloader();
+	new PluginsAutoloader();
 }
