@@ -10,13 +10,16 @@
 # Scripts
 !/scripts/
 
-# Version-controlled plugins
+# Must-use plugins
 !/wp-content/mu-plugins/
+/wp-content/mu-plugins/*
+!/wp-content/mu-plugins/autoloader.php
+
+# Version-controlled plugins
 !/wp-content/plugins/
-/wp-content/plugins/*
-!/wp-content/plugins/.gitkeep
 
 # Version-controlled themes
 !/wp-content/themes/
 /wp-content/themes/*
 !/wp-content/themes/.gitkeep
+!/wp-content/themes/wp-boilerplate
