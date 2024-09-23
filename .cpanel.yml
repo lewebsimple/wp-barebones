@@ -1,17 +1,29 @@
 ---
 deployment:
   tasks:
+    # Set up environment variables for deployment
     - export DEPLOYPATH=/home/wp-boilerplate/public_html
+
+    # Install Composer dependencies
     - composer install
+
+    # Build theme (optional)
     # - pnpm --dir ./wp-content/themes/wp-boilerplate install
     # - pnpm --dir ./wp-content/themes/wp-boilerplate build
     # - yarn --cwd ./wp-content/themes/wp-boilerplate install
     # - yarn --cwd ./wp-content/themes/wp-boilerplate build
+
+    # Synchronize /vendor/ (optional)
     # - mkdir -p ${DEPLOYPATH}/vendor/
     # - rsync -av ./vendor/ ${DEPLOYPATH}/vendor/ --delete
+
+    # Synchronize /wp-content/mu-plugins/
     - mkdir -p ${DEPLOYPATH}/wp-content/mu-plugins/
-    - mkdir -p ${DEPLOYPATH}/wp-content/dev-plugins/
-    - mkdir -p ${DEPLOYPATH}/wp-content/prod-plugins/
     - rsync -av ./wp-content/mu-plugins/ ${DEPLOYPATH}/wp-content/mu-plugins/ --delete
-    - rsync -av ./wp-content/plugins/ ${DEPLOYPATH}/wp-content/plugins/ --delete
+
+    # Synchronize /wp-content/prod-plugins/
+    - mkdir -p ${DEPLOYPATH}/wp-content/prod-plugins/
     - rsync -av ./wp-content/themes/ ${DEPLOYPATH}/wp-content/themes/ --delete --exclude=node_modules
+
+    # Update WooCommerce database (optional)
+    # - wp --path=${DEPLOYPATH} wc update
