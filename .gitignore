@@ -22,4 +22,4 @@
 !/wp-content/themes/
 /wp-content/themes/*
 !/wp-content/themes/.gitkeep
-!/wp-content/themes/wp-boilerplate
+!/wp-content/themes/wp-barebones
