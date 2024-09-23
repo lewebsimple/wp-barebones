@@ -16,16 +16,25 @@ class PluginsAutoloader {
 	private static $instance;
 
 	/** @var bool Whether the site is in production */
-	private bool $isProd;
+	private $isProd;
 
 	/** @var array Store Autoloader cache and site option */
 	private $cache;
 
+	/** @var string Absolute path to mu-plugins dir */
+	private $muPluginsPath;
+
+	/** @var string Absolute path to env-plugins dir */
+	private $envPluginsPath;
+
 	/** @var array Autoloaded plugins */
-	private $autoPlugins;
+	private $muPluginsBuiltin;
 
 	/** @var array Autoloaded mu-plugins */
 	private $muPlugins;
+
+	/** @var array Autoloaded env-plugins */
+	private $envPlugins;
 
 	/** @var int Number of plugins */
 	private $count;
@@ -33,31 +42,22 @@ class PluginsAutoloader {
 	/** @var array Newly activated plugins */
 	private $activated;
 
-	/** @var string Relative path to the mu-plugins dir */
-	private $muPluginsPath;
-
-	/** @var string Relative path to the {env}-plugins dir */
-	private $envPluginsPath;
-
 	/**
-	 * Create singleton, populate vars, and set WordPress hooks
+	 * Create singleton, populate vars and set WordPress hooks
 	 */
 	public function __construct() {
 		if ( isset( self::$instance ) ) {
 			return;
 		}
-
-		self::$instance = $this;
-		$this->isProd   = getenv( 'WP_ENV' ) !== 'development';
-
-		$this->muPluginsPath  = '/../' . basename( WPMU_PLUGIN_DIR );
+		self::$instance       = $this;
+		$this->isProd         = getenv( 'WP_ENV' ) !== 'development';
+		$this->muPluginsPath  = WPMU_PLUGIN_DIR;
 		$this->envPluginsPath = str_replace( 'mu-plugins', $this->isProd ? 'prod-plugins' : 'dev-plugins', $this->muPluginsPath );
-
+		$this->loadPlugins();
 		if ( is_admin() ) {
 			add_filter( 'show_advanced_plugins', array( $this, 'showInAdmin' ), 0, 2 );
 		}
-
-		$this->loadPlugins();
+		add_filter( 'plugins_url', array( $this, 'pluginsUrl' ), 10, 3 );
 	}
 
 	/**
@@ -67,14 +67,12 @@ class PluginsAutoloader {
 		$this->checkCache();
 		$this->validatePlugins();
 		$this->countPlugins();
-
 		array_map(
-			static function () {
-				include_once WPMU_PLUGIN_DIR . '/' . func_get_args()[0];
+			function ( $path ) {
+				include_once $path;
 			},
-			array_keys( $this->cache['plugins'] )
+			array_column( $this->cache['plugins'], 'path' )
 		);
-
 		add_action( 'plugins_loaded', array( $this, 'pluginHooks' ), -9999 );
 	}
 
@@ -89,59 +87,68 @@ class PluginsAutoloader {
 	public function showInAdmin( $show, $type ) {
 		$screen  = get_current_screen();
 		$current = is_multisite() ? 'plugins-network' : 'plugins';
-
 		if ( $screen->base !== $current || $type !== 'mustuse' || ! current_user_can( 'activate_plugins' ) ) {
 			return $show;
 		}
-
 		$this->updateCache();
-
-		$this->autoPlugins = array_map(
-			function ( $auto_plugin ) {
-				$auto_plugin['Name'] .= ' *';
-				return $auto_plugin;
-			},
-			$this->autoPlugins
-		);
-
-		$GLOBALS['plugins']['mustuse'] = array_unique( array_merge( $this->autoPlugins, $this->muPlugins ), SORT_REGULAR );
-
+		$GLOBALS['plugins']['mustuse'] = array_unique( array_merge( $this->muPlugins, $this->envPlugins, $this->muPluginsBuiltin ), SORT_REGULAR );
 		return false;
 	}
 
 	/**
-	 * This sets the cache or calls for an update
+	 * Filter plugins_url() to return the correct URL for mu-plugins.
+	 *
+	 * @param string $url    The complete URL to the plugins directory including scheme and path.
+	 * @param string $path   Path relative to the plugins URL.
+	 * @param string $plugin The plugin file path.
+	 * @return string Correct URL for mu-plugins.
+	 */
+	public function pluginsUrl( $url, $path, $plugin ) {
+		if ( strpos( $plugin, $this->envPluginsPath ) === 0 ) {
+			$url = str_replace( "plugins$this->envPluginsPath", $this->isProd ? 'prod-plugins' : 'dev-plugins', $url );
+		}
+		return $url;
+	}
+
+	/**
+	 * Load cache from database or regenerate it if necessary.
 	 */
 	private function checkCache() {
-		$cache = get_site_option( 'bedrock_autoloader' );
-
+		$cache = get_site_option( 'plugins_autoloader_cache' );
 		if ( $cache === false || ( isset( $cache['plugins'], $cache['count'] ) && count( $cache['plugins'] ) !== $cache['count'] ) ) {
 			$this->updateCache();
 			return;
 		}
-
 		$this->cache = $cache;
 	}
 
 	/**
-	 * Get the plugins and mu-plugins from the mu-plugin path and remove duplicates.
+	 * Get plugins / mu-plugins / env-plugins and remove duplicates.
 	 * Check cache against current plugins for newly activated plugins.
 	 * After that, we can update the cache.
 	 */
 	private function updateCache() {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
-
-		$this->autoPlugins = get_plugins( $this->muPluginsPath );
-		$this->muPlugins   = get_mu_plugins();
-		$plugins           = array_diff_key( $this->autoPlugins, $this->muPlugins );
-		$rebuild           = ! isset( $this->cache['plugins'] );
-		$this->activated   = $rebuild ? $plugins : array_diff_key( $plugins, $this->cache['plugins'] );
-		$this->cache       = array(
+		$this->muPluginsBuiltin = get_mu_plugins();
+		$this->muPlugins        = get_plugins( '/../' . basename( $this->muPluginsPath ) );
+		foreach ( $this->muPlugins as $plugin_file => &$plugin_info ) {
+			$plugin_info['path']  = $this->muPluginsPath . '/' . $plugin_file;
+			$plugin_info['Name'] .= ' [mu-plugins]';
+		}
+		$this->envPlugins = get_plugins( '/../' . basename( $this->envPluginsPath ) );
+		foreach ( $this->envPlugins as $plugin_file => &$plugin_info ) {
+			$plugin_info['path']  = $this->envPluginsPath . '/' . $plugin_file;
+			$plugin_info['Name'] .= $this->isProd ? ' [prod-plugins]' : ' [dev-plugins]';
+		}
+		$allMuPlugins    = array_merge( $this->muPlugins, $this->envPlugins );
+		$plugins         = array_diff_key( $allMuPlugins, $this->muPluginsBuiltin );
+		$rebuild         = ! isset( $this->cache['plugins'] );
+		$this->activated = $rebuild ? $plugins : array_diff_key( $plugins, $this->cache['plugins'] );
+		$this->cache     = array(
 			'plugins' => $plugins,
 			'count'   => $this->countPlugins(),
 		);
-
-		update_site_option( 'bedrock_autoloader', $this->cache );
+		update_site_option( 'plugins_autoloader_cache', $this->cache );
 	}
 
 	/**
@@ -153,7 +160,6 @@ class PluginsAutoloader {
 		if ( ! is_array( $this->activated ) ) {
 			return;
 		}
-
 		foreach ( $this->activated as $plugin_file => $plugin_info ) {
 			do_action( 'activate_' . $plugin_file );
 		}
@@ -163,8 +169,8 @@ class PluginsAutoloader {
 	 * Check that the plugin file exists, if it doesn't update the cache.
 	 */
 	private function validatePlugins() {
-		foreach ( $this->cache['plugins'] as $plugin_file => $plugin_info ) {
-			if ( ! file_exists( WPMU_PLUGIN_DIR . '/' . $plugin_file ) ) {
+		foreach ( $this->cache['plugins'] as $plugin_info ) {
+			if ( ! file_exists( $plugin_info['path'] ) ) {
 				$this->updateCache();
 				break;
 			}
@@ -174,8 +180,8 @@ class PluginsAutoloader {
 	/**
 	 * Count the number of autoloaded plugins.
 	 *
-	 * Count our plugins (but only once) by counting the top level folders in the
-	 * mu-plugins dir. If it's more or less than last time, update the cache.
+	 * Count our plugins (but only once) by counting the top level folders in
+	 * mu-plugins / env-plugins. If it's more or less than last time, update the cache.
 	 *
 	 * @return int Number of autoloaded plugins.
 	 */
@@ -183,14 +189,12 @@ class PluginsAutoloader {
 		if ( isset( $this->count ) ) {
 			return $this->count;
 		}
-
-		$count = count( glob( WPMU_PLUGIN_DIR . '/*/', GLOB_ONLYDIR | GLOB_NOSORT ) );
-
+		$count = count( glob( $this->muPluginsPath . '/*/', GLOB_ONLYDIR | GLOB_NOSORT ) )
+			+ count( glob( $this->envPluginsPath . '/*/', GLOB_ONLYDIR | GLOB_NOSORT ) );
 		if ( ! isset( $this->cache['count'] ) || $count !== $this->cache['count'] ) {
 			$this->count = $count;
 			$this->updateCache();
 		}
-
 		return $this->count;
 	}
 }

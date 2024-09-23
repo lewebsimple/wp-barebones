@@ -361,20 +361,20 @@
         },
         {
             "name": "lewebsimple/kaliroots",
-            "version": "v0.9.11",
+            "version": "v0.9.12",
             "source": {
                 "type": "git",
                 "url": "ssh://git@gitlab.ledevsimple.ca:222/wp-themes/kaliroots.git",
-                "reference": "5c71b5b1c6a0f9b68ef51a6f8fb29767837e983a"
+                "reference": "b8ffbd413aa50e1ebf561f3fb2a6231ab68af3d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.ledevsimple.ca/dist/lewebsimple/kaliroots/lewebsimple-kaliroots-v0.9.11-26574c.zip",
-                "reference": "5c71b5b1c6a0f9b68ef51a6f8fb29767837e983a",
-                "shasum": "f3000490d2b1b50768cb70992ee0f2baf29673c4"
+                "url": "https://satis.ledevsimple.ca/dist/lewebsimple/kaliroots/lewebsimple-kaliroots-v0.9.12-f782c9.zip",
+                "reference": "b8ffbd413aa50e1ebf561f3fb2a6231ab68af3d8",
+                "shasum": "0941b87c9d5e3e08c1efb6584e6ac6b18ca48776"
             },
             "type": "wordpress-theme",
-            "time": "2024-07-31T18:42:26+00:00"
+            "time": "2024-09-23T13:51:21+00:00"
         },
         {
             "name": "lewebsimple/polylang-pro",
