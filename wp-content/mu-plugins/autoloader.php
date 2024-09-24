@@ -104,6 +104,9 @@ class PluginsAutoloader {
 	 * @return string Correct URL for mu-plugins.
 	 */
 	public function pluginsUrl( $url, $path, $plugin ) {
+		if ( '/' !== $plugin[0] ) {
+			$plugin = "/$plugin";
+		}
 		if ( strpos( $plugin, $this->envPluginsPath ) === 0 ) {
 			$url = str_replace( "plugins$this->envPluginsPath", $this->isProd ? 'prod-plugins' : 'dev-plugins', $url );
 		}
