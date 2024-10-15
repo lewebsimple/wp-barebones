@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93a4e2162cdc8369544fe7fdbaeba0f1",
+    "content-hash": "9d8f64610c4310f51987faf66f7d924b",
     "packages": [
         {
             "name": "brick/math",
@@ -273,20 +273,20 @@
         },
         {
             "name": "lewebsimple/advanced-custom-fields-pro",
-            "version": "v6.3.6",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "ssh://git@gitlab.ledevsimple.ca:222/wp-plugins/advanced-custom-fields-pro.git",
-                "reference": "433676c29dadefe5cf511cb334eda55428d5b0b1"
+                "reference": "73df94992973dd5cc22ed0f7b25bb27882f91e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.ledevsimple.ca/dist/lewebsimple/advanced-custom-fields-pro/lewebsimple-advanced-custom-fields-pro-v6.3.6-248147.zip",
-                "reference": "433676c29dadefe5cf511cb334eda55428d5b0b1",
-                "shasum": "9d54ece9bc97012bfdd8bd6eefda1e5e83c03d0f"
+                "url": "https://satis.ledevsimple.ca/dist/lewebsimple/advanced-custom-fields-pro/lewebsimple-advanced-custom-fields-pro-v6.3.8-f3a838.zip",
+                "reference": "73df94992973dd5cc22ed0f7b25bb27882f91e2a",
+                "shasum": "940d71c6813d67118cd2eea0b9f2a56c6ac14813"
             },
             "type": "wordpress-plugin",
-            "time": "2024-08-29T14:49:32+00:00"
+            "time": "2024-10-11T13:04:49+00:00"
         },
         {
             "name": "lewebsimple/gravity-forms-polylang",
@@ -310,20 +310,20 @@
         },
         {
             "name": "lewebsimple/gravityforms",
-            "version": "v2.8.17",
+            "version": "v2.8.18",
             "source": {
                 "type": "git",
                 "url": "ssh://git@gitlab.ledevsimple.ca:222/wp-plugins/gravityforms.git",
-                "reference": "d7481c2f72670a24f529d7b902f323ebc43f5542"
+                "reference": "fdb560c53a4fd5b92f3c1e6e244334065e08fda0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.ledevsimple.ca/dist/lewebsimple/gravityforms/lewebsimple-gravityforms-v2.8.17-362bae.zip",
-                "reference": "d7481c2f72670a24f529d7b902f323ebc43f5542",
-                "shasum": "6c6eb90759e454a6730aed247f97c3ea2e815b20"
+                "url": "https://satis.ledevsimple.ca/dist/lewebsimple/gravityforms/lewebsimple-gravityforms-v2.8.18-2204b1.zip",
+                "reference": "fdb560c53a4fd5b92f3c1e6e244334065e08fda0",
+                "shasum": "c8680ece20ec5410a3fd1448fe149d5c04663aa8"
             },
             "type": "wordpress-plugin",
-            "time": "2024-08-27T12:13:52+00:00"
+            "time": "2024-10-03T11:35:15+00:00"
         },
         {
             "name": "lewebsimple/gravityformsturnstile",
@@ -851,15 +851,15 @@
         },
         {
             "name": "wpackagist-plugin/simple-custom-post-order",
-            "version": "2.5.7",
+            "version": "2.5.8",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/simple-custom-post-order/",
-                "reference": "tags/2.5.7"
+                "reference": "tags/2.5.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/simple-custom-post-order.2.5.7.zip"
+                "url": "https://downloads.wordpress.org/plugin/simple-custom-post-order.2.5.8.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -905,15 +905,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "23.4",
+            "version": "23.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/23.4"
+                "reference": "tags/23.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.23.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.23.6.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -941,15 +941,15 @@
         },
         {
             "name": "wpackagist-plugin/wp-mail-logging",
-            "version": "1.12.0",
+            "version": "1.13.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-mail-logging/",
-                "reference": "tags/1.12.0"
+                "reference": "tags/1.13.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-mail-logging.1.12.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/wp-mail-logging.1.13.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
