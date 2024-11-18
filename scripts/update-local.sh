@@ -15,6 +15,12 @@ TIME_START
 rsync -ave "ssh -p 2222" ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/wp-content/uploads/ wp-content/uploads/ --exclude node_modules --delete > ${_LOG_} 2>&1
 TIME_STOP
 
+# Synchronize plugins
+INFO "Synchronizing plugins..."
+TIME_START
+rsync -ave "ssh -p 2222" ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/wp-content/plugins/ wp-content/plugins/ --exclude node_modules --delete > ${_LOG_} 2>&1
+TIME_STOP
+
 # Synchronize database
 INFO "Synchronizing database..."
 DB_FILE="${REMOTE_DOMAIN}-${_NOW_}.sql"
