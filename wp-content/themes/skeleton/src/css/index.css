@@ -1,2 +1,5 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
 /* Vendors */
 @import "./vendors/wordpress.css";

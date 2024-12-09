@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 import restart from "vite-plugin-restart";
 import vue from "@vitejs/plugin-vue";
+import ui from "@nuxt/ui/vite";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -24,6 +25,7 @@ export default defineConfig(({ mode }) => ({
     basicSsl({ certDir: resolve(homedir(), ".local/share/certs") }),
     restart({ reload: ["/**/*.php", "!vendor/**/*"] }),
     vue(),
+    ui({ colorMode: false }),
   ],
   resolve: {
     alias: {
