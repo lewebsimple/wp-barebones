@@ -36,7 +36,6 @@
     /* Types */
     "types": [
       "@types/jquery",
-      "unplugin-icons/types/vue",
       "vite/client"
     ]
   },
