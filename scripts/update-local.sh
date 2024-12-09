@@ -33,7 +33,7 @@ TIME_STOP
 # Replace domain
 INFO "Replacing domain ${REMOTE_DOMAIN} => ${LOCAL_DOMAIN}..."
 TIME_START
-wp --skip-plugins --skip-themes search-replace "${REMOTE_DOMAIN}" "${LOCAL_DOMAIN}" --all-tables > ${_LOG_} 2>&1
+wp --skip-plugins --skip-themes search-replace "https://${REMOTE_DOMAIN}" "${LOCAL_PROTOCOL}://${LOCAL_DOMAIN}" --all-tables > ${_LOG_} 2>&1
 TIME_STOP
 
 # Deactivate plugins
@@ -52,4 +52,4 @@ TIME_START
 wp rewrite flush --hard > ${_LOG_} 2>&1
 TIME_STOP
 
-INFO "Local development site ready: https://${LOCAL_DOMAIN}"
+INFO "Local development site ready: ${LOCAL_PROTOCOL}://${LOCAL_DOMAIN}"

@@ -70,3 +70,8 @@ fi
 if [ -z "${LOCAL_DOMAIN}" ]; then
   ERROR "Could not determine local domain. Please verify ${_DIR_}/.lwsrc"
 fi
+
+# Determine local protocol
+if [ -z "${LOCAL_PROTOCOL}" ]; then
+  LOCAL_PROTOCOL="${LOCAL_PROTOCOL-https}"
+fi
