@@ -1,0 +1,36 @@
+:root {
+  --wp-adminbar-offset: 0px;
+}
+body.admin-bar {
+  --wp-adminbar-offset: 46px;
+  @media (width >= 783px) {
+    --wp-adminbar-offset: 32px;
+  }
+}
+
+@layer base {
+  #wpadminbar {
+    @apply fixed top-0;
+  }
+}
+
+@layer components {
+  .wp-video {
+    width: 100% !important;
+  }
+}
+
+@layer utilities {
+  .wp-h-screen {
+    height: calc(100vh - var(--wp-adminbar-offset));
+  }
+  .wp-max-h-screen {
+    max-height: calc(100vh - var(--wp-adminbar-offset));
+  }
+  .wp-min-h-screen {
+    min-height: calc(100vh - var(--wp-adminbar-offset));
+  }
+  .wp-top-0 {
+    top: var(--wp-adminbar-offset);
+  }
+}
