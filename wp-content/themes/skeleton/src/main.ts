@@ -1,6 +1,5 @@
 import "@/css/index.css";
-import { createApp, h } from "vue";
-import ui from "@nuxt/ui/vue-plugin";
+import { createApp, h, type Plugin } from "vue";
 import { version } from "../package.json";
 import UApp from "~/@nuxt/ui/dist/runtime/components/App.vue";
 
@@ -12,11 +11,15 @@ const innerHTML = appElement?.innerHTML || "";
 export const app = createApp({
   render() {
     return h(UApp, null, {
-      default: () => h("div", { innerHTML }),
+      default: () => h({ template: innerHTML }),
     });
   },
 });
 
-app.use(ui);
+// Vue.js plugins
+const plugins: Record<string, { default: Plugin }> = import.meta.glob("./plugins/*.ts", { eager: true });
+Object.keys(plugins).forEach((key) => {
+  app.use(plugins[key].default);
+});
 
 app.mount("#app", true);

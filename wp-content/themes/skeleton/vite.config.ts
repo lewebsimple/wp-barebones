@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "~": resolve(__dirname, "node_modules"),
       "@": resolve(__dirname, "src"),
+      "vue": "vue/dist/vue.esm-bundler.js",
     },
   },
   server: {
