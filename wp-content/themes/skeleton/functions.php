@@ -3,6 +3,7 @@
 // Administration
 
 // Core
+require_once __DIR__ . '/includes/core/assets.php';
 
 // Custom Post Types
 
